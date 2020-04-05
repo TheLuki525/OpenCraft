@@ -1,1 +1,1 @@
-OpenCraft the minecraft cousin
+OpenCraft, a Minecraft younger cousin

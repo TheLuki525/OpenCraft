@@ -136,7 +136,7 @@ void Game::OnRender()
 
 	if (!kb)
 		return;
-	ch1.flashLight ^= kb->Released_Pressed('L');//I'm so proud of myself xD
+	ch1.flashLight ^= kb->justPressed('L');//I'm so proud of myself xD
 	ch1.draw(cam.mode);
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -199,7 +199,7 @@ void Game::OnTimer(int id)
 	bool pause_old = pause;
 
 	if (nickname_rdy)//can't leave pause menu without nickname
-		pause ^= kb->Released_Pressed('P');
+		pause ^= kb->justPressed('P');
 
 	if (pause && !pause_old)//pause menu just enabled
 		pauseTime = GetTickCount();
@@ -208,13 +208,13 @@ void Game::OnTimer(int id)
 	{
 		if(!nickname_rdy)
 			for (char i = 'A'; i <= 'Z'; i++)//signs from A-Z
-				if (kb->Released_Pressed(i))
+				if (kb->justPressed(i))
 					nickname += i;
 		if (!nickname_rdy)//numbers from 0-9
 			for (char i = '0'; i <= '9'; i++)
-				if (kb->Released_Pressed(i))
+				if (kb->justPressed(i))
 					nickname += i;
-		if (kb->Released_Pressed(VK_BACK) && nickname.length() > 0)//erasing last char with backspace
+		if (kb->justPressed(VK_BACK) && nickname.length() > 0)//erasing last char with backspace
 			nickname.resize(nickname.length()-1);
 		if (kb->getKeyState(VK_RETURN) && nickname.length() > 0)//nickname ready after return
 			nickname_rdy = true;
@@ -296,9 +296,9 @@ void Game::OnTimer(int id)
 
 #pragma region WalkingGravityJumping
 
-	if (kb->Released_Pressed('W') && runKeyPressed <= 0)
+	if (kb->justPressed('W') && runKeyPressed <= 0)
 		runKeyPressed = 30;
-	if (runKeyPressed > 0 && runKeyPressed < 30 && kb->Released_Pressed('W'))
+	if (runKeyPressed > 0 && runKeyPressed < 30 && kb->justPressed('W'))
 		run_state = true;
 	if (run_state && !kb->getKeyState('W'))
 		run_state = false;

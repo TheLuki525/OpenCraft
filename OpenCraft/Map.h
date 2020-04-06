@@ -3,7 +3,7 @@
 #include <vector>
 class Map
 {
-	Chunk* chunks;
+	std::vector<std::vector<std::vector<Chunk>>> chunks_quarters;
 public:
 	Map();
 	~Map();

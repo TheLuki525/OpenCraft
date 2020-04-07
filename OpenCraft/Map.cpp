@@ -3,15 +3,16 @@
 
 
 Map::Map()
-	:chunks_quarters(4)
 {
-	for (auto &quarter : chunks_quarters)
+	for (int x = -3; x <= 3; x++)
 	{
-		for (int i = 0; i < 3; i++)
+		if (x == 0)
+			continue;
+		for (int z = -3; z <= 3; z++)
 		{
-			quarter.push_back(std::vector<Chunk>());
-			for (int j = 0; j < 3; j++)
-				quarter[i].push_back(Chunk());
+			if (z == 0)
+				continue;
+			chunks[std::pair<int, int>(x, z)] = new Chunk;
 		}
 	}
 }
@@ -19,45 +20,59 @@ Map::Map()
 
 Map::~Map()
 {
+	for (auto &chunk : chunks)
+	{
+		delete chunk.second;
+	}
 }
 
 void Map::draw()
 {
-	for (auto& quarter : chunks_quarters)
-		for (auto& quarter_line : quarter)
-			for (auto& chunk : quarter_line)
-				chunk.draw();
+	for (auto& chunk : chunks)
+	{
+		int chunk_x = chunk.first.first * 16;
+		int chunk_z = chunk.first.second * 16;
+
+		if (chunk_x < 0)
+			chunk_x += 8;
+		else
+			chunk_x -= 8;
+
+		if (chunk_z < 0)
+			chunk_z += 8;
+		else
+			chunk_z -= 8;
+
+		glPushMatrix();
+		{
+			glTranslatef(chunk_x, 0.0f, chunk_z);
+			chunk.second->draw();
+		}
+		glPopMatrix();
+	}
 }
 
 GLubyte Map::getBlock(float x, float y, float z)
 {
 	int ix = static_cast<int>(x), iy = static_cast<int>(y), iz = static_cast<int>(z);
-	if (iy < 0 || iy > 127 || abs(ix) >= DRAW_DIST || abs(iz) >= DRAW_DIST)
-		return 0;
-	int quarter = 0;
-	if (ix >= 0)
-	{
-		if (iz >= 0)
-		{
-			quarter = 0;
-		}
-		else
-		{
-			quarter = 3;
-		}
-	}
+	int chunk_x = ix / 16;
+	int chunk_z = iz / 16;
+
+	if (x < 0.0f)
+		chunk_x--;
 	else
-	{
-		if (iz >= 0)
-		{
-			quarter = 1;
-		}
-		else
-		{
-			quarter = 2;
-		}
-	}
-	return chunks_quarters[quarter][ix/4][iy/4].getBlock(ix%16, iy, iz%16);
+		chunk_x++;
+
+	if (z < 0.0f)
+		chunk_z--;
+	else
+		chunk_z++;
+
+	auto it = chunks.find(std::pair<int, int>(chunk_x, chunk_z));
+
+	if(it != chunks.end())
+		return it->second->getBlock(abs(ix)%16, iy, abs(iz)%16);
+	return 0;
 }
 
 void Map::setBlock(int, int, int, GLubyte)

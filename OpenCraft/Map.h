@@ -1,9 +1,9 @@
 #pragma once
 #include "Chunk.h"
-#include <vector>
+#include <map>
 class Map
 {
-	std::vector<std::vector<std::vector<Chunk>>> chunks_quarters;
+	std::map<std::pair<int, int>, Chunk*> chunks;
 public:
 	Map();
 	~Map();

@@ -11,8 +11,9 @@ Game::Game()
 	kb = nullptr;
 	pause = true;
 	nickname_rdy = false;
-	ch1.pos.x = 40.0f;
-	ch1.pos.z = 40.0f;
+	ch1.pos.x = 0.0f;
+	ch1.pos.y = 60.0f;
+	ch1.pos.z = 0.0f;
 	time = -1;
 	srand(123);
 	runKeyPressed = 0;
@@ -286,9 +287,9 @@ void Game::OnTimer(int id)
 		file.close();
 		pause = true;
 		nickname_rdy = false;
-		ch1.pos.x = 40.0f;
-		ch1.pos.y = 0.0f;
-		ch1.pos.z = 40.0f;
+		ch1.pos.x = 0.0f;
+		ch1.pos.y = 60.0f;
+		ch1.pos.z = 0.0f;
 		best = 0;
 		time = -1;
 	}
@@ -306,6 +307,7 @@ void Game::OnTimer(int id)
 		runKeyPressed--;
 	ch1.walk(kb->getKeyState('W'), kb->getKeyState('S'), kb->getKeyState('A'), kb->getKeyState('D'), run_state);
 
+	
 	if (ch1.on_ground)//gravity and jumping
 	{
 		if (kb->getKeyState(' '))
@@ -313,6 +315,7 @@ void Game::OnTimer(int id)
 	}
 	else
 		ch1.speed.y -= 0.02f;
+	
 
 #pragma endregion
 

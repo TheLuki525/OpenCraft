@@ -263,7 +263,7 @@ void Player::draw(bool cam_mode)
 		float mY[] = { 1.0f, 1.0f, 0.0f, 1.0f };
 		glMaterialf(GL_FRONT, GL_SHININESS, 20.0f);
 
-		glPushMatrix();//Noga_L
+		glPushMatrix();//Leg_left
 		{
 			glTranslatef(2.0f, 12.0f, 0.0f);
 			glRotatef(phase, 1.0f, 0.0f, 0.0f);
@@ -276,7 +276,7 @@ void Player::draw(bool cam_mode)
 			glutSolidCube(1.0f);
 		}
 		glPopMatrix();
-		glPushMatrix();//Noga_P
+		glPushMatrix();//Leg_right
 		{
 			glTranslatef(-2.0f, 12.0f, 0.0f);
 			glRotatef(-phase, 1.0f, 0.0f, 0.0f);
@@ -289,7 +289,7 @@ void Player::draw(bool cam_mode)
 			glutSolidCube(1.0f);
 		}
 		glPopMatrix();
-		glPushMatrix();//Tulow
+		glPushMatrix();//chest
 		{
 			glTranslatef(0.0f, 18.0f, 0.0f);
 			glScalef(8.0f, 12.0f, 4.0f);
@@ -300,7 +300,7 @@ void Player::draw(bool cam_mode)
 			glutSolidCube(1.0f);
 		}
 		glPopMatrix();
-		glPushMatrix();//Reka_L
+		glPushMatrix();//Hand_left
 		{
 			glTranslatef(6.0f, 24.0f, 0.0f);
 			glRotatef(2.0f, 0.0f, 0.0f, 1.0f);
@@ -314,7 +314,7 @@ void Player::draw(bool cam_mode)
 			glutSolidCube(1.0f);
 		}
 		glPopMatrix();
-		glPushMatrix();//Reka_P
+		glPushMatrix();//Hand_right
 		{
 			glTranslatef(-6.0f, 24.0f, 0.0f);
 			glRotatef(-2.0f, 0.0f, 0.0f, 1.0f);
@@ -328,7 +328,7 @@ void Player::draw(bool cam_mode)
 			glutSolidCube(1.0f);
 		}
 		glPopMatrix();
-		glPushMatrix();//Glowa
+		glPushMatrix();//Head
 		{
 			glTranslatef(0.0f, 24.0f, 0.0f);
 			glRotatef(head_ang.x, 1.0f, 0.0f, 0.0f);

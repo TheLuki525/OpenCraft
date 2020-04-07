@@ -4,19 +4,22 @@
 
 void Block::draw()
 {
-	float m[] = { (id & 0b11100000)/224.0f, (id & 0b00011100)/28.0f, (id & 0b00000111)/7.0f, 0.0f };
+	if (id == 0)
+	{
+		visible = false;
+		return;
+	}
 	glMaterialf(GL_FRONT, GL_SHININESS, 20.0f);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, m);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, m);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, m);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, color);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, color);
 	glutSolidCube(1.0);
 }
 
 Block::Block()
+	:id(rand() & 0xFF), color{ (id & 0b11100000) / 224.0f, (id & 0b00011100) / 28.0f, (id & 0b00000111) / 7.0f, 0.0f }
 {
-
-	id = rand() & 0xFF;
-	visible = rand() < 1000;
+	visible = false;
 }
 
 

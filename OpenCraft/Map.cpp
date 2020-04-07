@@ -1,22 +1,20 @@
 #include "stdafx.h"
 #include "Map.h"
 
-
 Map::Map()
 {
-	for (int x = -3; x <= 3; x++)
+	for (int x = -2; x <= 2; x++)
 	{
 		if (x == 0)
 			continue;
-		for (int z = -3; z <= 3; z++)
+		for (int z = -2; z <= 2; z++)
 		{
 			if (z == 0)
 				continue;
-			chunks[std::pair<int, int>(x, z)] = new Chunk;
+			chunks[std::pair<int, int>(x, z)] = new Chunk(rand() % 0xFE + 1);
 		}
 	}
 }
-
 
 Map::~Map()
 {
@@ -32,16 +30,18 @@ void Map::draw()
 	{
 		int chunk_x = chunk.first.first * 16;
 		int chunk_z = chunk.first.second * 16;
-
+		int shift = 8;
 		if (chunk_x < 0)
-			chunk_x += 8;
+			chunk_x += shift;
 		else
-			chunk_x -= 8;
+			chunk_x -= shift;
 
 		if (chunk_z < 0)
-			chunk_z += 8;
+			chunk_z += shift;
 		else
-			chunk_z -= 8;
+			chunk_z -= shift;
+		chunk_x -= shift;
+		chunk_z -= shift;
 
 		glPushMatrix();
 		{
@@ -70,11 +70,24 @@ GLubyte Map::getBlock(float x, float y, float z)
 
 	auto it = chunks.find(std::pair<int, int>(chunk_x, chunk_z));
 
-	if(it != chunks.end())
-		return it->second->getBlock(abs(ix)%16, iy, abs(iz)%16);
+	if (it != chunks.end())
+	{
+		if (x < 0)
+			ix = 15 + (ix % 16);
+		else
+			ix = ix % 16;
+
+		if (z < 0)
+			iz = 15 + (iz % 16);
+		else
+			iz = iz % 16;
+		it->second->setBlock(ix, iy, iz, rand()%0xFE+1);
+		return it->second->getBlock(ix, iy, iz);
+	}
 	return 0;
 }
 
-void Map::setBlock(int, int, int, GLubyte)
+void Map::setBlock(int ix, int iy, int iz, GLubyte)
 {
+
 }

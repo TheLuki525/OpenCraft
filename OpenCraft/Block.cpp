@@ -16,8 +16,8 @@ void Block::draw()
 	glutSolidCube(1.0);
 }
 
-Block::Block()
-	:id(rand() & 0xFF), color{ (id & 0b11100000) / 224.0f, (id & 0b00011100) / 28.0f, (id & 0b00000111) / 7.0f, 0.0f }
+Block::Block(GLubyte id)
+	:id(id), color{ (id & 0b11100000) / 224.0f, (id & 0b00011100) / 28.0f, (id & 0b00000111) / 7.0f, 0.0f }
 {
 	visible = false;
 }

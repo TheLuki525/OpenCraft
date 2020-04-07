@@ -6,7 +6,7 @@ public:
 	bool visible;
 	float color[4];
 	void draw();
-	Block();
+	Block(GLubyte id);
 	~Block();
 };
 

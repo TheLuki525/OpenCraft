@@ -11,9 +11,9 @@ Game::Game()
 	kb = nullptr;
 	pause = true;
 	nickname_rdy = false;
-	ch1.pos.x = 0.0f;
+	ch1.pos.x = 1.0f;
 	ch1.pos.y = 60.0f;
-	ch1.pos.z = 0.0f;
+	ch1.pos.z = 1.0f;
 	time = -1;
 	srand(123);
 	runKeyPressed = 0;
@@ -287,9 +287,9 @@ void Game::OnTimer(int id)
 		file.close();
 		pause = true;
 		nickname_rdy = false;
-		ch1.pos.x = 0.0f;
+		/*ch1.pos.x = 0.0f;
 		ch1.pos.y = 60.0f;
-		ch1.pos.z = 0.0f;
+		ch1.pos.z = 0.0f;*/
 		best = 0;
 		time = -1;
 	}

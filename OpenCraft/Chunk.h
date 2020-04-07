@@ -7,7 +7,7 @@ public:
 	void draw();
 	void setBlock(int, int, int, GLubyte);
 	GLubyte getBlock(int, int, int);
-	Chunk();
+	Chunk(GLubyte);
 	~Chunk();
 };
 

@@ -116,11 +116,15 @@ void Game::OnRender()
 	float global_head_angle_x = -ch1.head_ang.x;
 
 	cam.set(two_angles_to_vec3(global_head_angle_x, global_head_angle_y), ch1.pos);
+	//Dynamically add chunks
+	for(int x = -2; x <= 2; x++)
+		for (int z = -2; z <= 2; z++)
+			map.addChunk(ch1.pos.x + 16 * x, ch1.pos.z + 16 * z);
 	//Drawing the map
 	glPushMatrix();
 	{
 		glTranslatef(0.5f, 0.5f, 0.5f);
-		map.draw();
+		map.draw(ch1.pos.x, ch1.pos.z);
 	}
 	glPopMatrix();
 	

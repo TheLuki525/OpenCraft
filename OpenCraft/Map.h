@@ -7,7 +7,8 @@ class Map
 public:
 	Map();
 	~Map();
-	void draw();
+	void draw(float, float);
+	void addChunk(float, float);
 	GLubyte getBlock(float, float, float);
 	void setBlock(int, int, int, GLubyte);
 };

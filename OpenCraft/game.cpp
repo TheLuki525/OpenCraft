@@ -112,10 +112,22 @@ void Game::OnRender()
 #pragma endregion
 
 #pragma region RenderingGameWorld
+	//camera settings
 	float global_head_angle_y = ch1.head_ang.y + ch1.ang.y;
 	float global_head_angle_x = -ch1.head_ang.x;
-
-	cam.set(two_angles_to_vec3(global_head_angle_x, global_head_angle_y), ch1.pos);
+	vec3 looking_vec = two_angles_to_vec3(global_head_angle_x, global_head_angle_y);
+	cam.set(looking_vec, ch1.pos);
+	//ray (the block the player is looking at)
+	{
+		vec3 step_vec = looking_vec / 20;//20 samples per block (len of looking_vec is 1.0)
+		vec3 ray_vec = ch1.pos;
+		ray_vec.y += PLAYER_EYE_HEIGHT;
+		for (int i = 0; i < 100; i++)
+		{
+			ray_vec += step_vec;
+			map.getBlock(ray_vec.x, ray_vec.y, ray_vec.z);
+		}
+	}
 	//Dynamically add chunks
 	for(int x = -2; x <= 2; x++)
 		for (int z = -2; z <= 2; z++)
@@ -194,7 +206,6 @@ void Game::OnTimer(int id)
 {
 	if (!kb)
 		return;
-
 	kb->update();
 
 #pragma region InputAndPauseOperations
@@ -203,8 +214,17 @@ void Game::OnTimer(int id)
 		glutLeaveMainLoop();
 	bool pause_old = pause;
 
-	if (nickname_rdy)//can't leave pause menu without nickname
+	if (nickname_rdy)//can't leave pause menu without a nickname
 		pause ^= kb->justPressed('P');
+
+	if (pause)
+	{
+		glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
+	}
+	else
+	{
+		glutSetCursor(GLUT_CURSOR_FULL_CROSSHAIR);
+	}
 
 	if (pause && !pause_old)//pause menu just enabled
 		pauseTime = GetTickCount();
@@ -378,17 +398,20 @@ void Game::OnTimer(int id)
 
 void Game::CursorPosUpdate(int x, int y)
 {
-	if (GetForegroundWindow() != HgameWindow)//if the game window isin't active, cursor operations are cancelled 
+	if (GetForegroundWindow() != HgameWindow)//if the game window isin't active, the cursor operations are cancelled 
 		return;
-	if (x != window_width >> 1 || y != window_height >> 1)//if cursor is in the middle of game window, it will not be warped
+	if (!pause)
 	{
-		ch1.head_ang.y -= (static_cast<float>(x) - (window_width >> 1))*0.1f;
-		ch1.head_ang.x += (static_cast<float>(y) - (window_height >> 1))*0.1f;
-		glutWarpPointer(window_width >> 1, window_height >> 1);
-		if (ch1.head_ang.x > 89.0f)
-			ch1.head_ang.x = 89.0f;
-		else if (ch1.head_ang.x < -89.0f)
-			ch1.head_ang.x = -89.0f;
+		if (x != window_width / 2 || y != window_height / 2)//if the cursor is in the middle of the game window, it will not be warped
+		{
+			ch1.head_ang.y -= (static_cast<float>(x) - (window_width >> 1)) * 0.1f;
+			ch1.head_ang.x += (static_cast<float>(y) - (window_height >> 1)) * 0.1f;
+			glutWarpPointer(window_width / 2, window_height / 2);
+			if (ch1.head_ang.x > 89.0f)
+				ch1.head_ang.x = 89.0f;
+			else if (ch1.head_ang.x < -89.0f)
+				ch1.head_ang.x = -89.0f;
+		}
 	}
 }
 
@@ -411,6 +434,6 @@ void Game::setHgameWindow(HWND h)
 void Game::renderBitmapString(float x, float y, std::string text)
 {
 	glRasterPos3f(x, y, 1.0f);
-	for (unsigned int i = 0; i < text.length(); i++)
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, text[i]);//GLUT_BITMAP_TIMES_ROMAN_24
+	for (char ch : text)
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ch);//GLUT_BITMAP_TIMES_ROMAN_24
 }

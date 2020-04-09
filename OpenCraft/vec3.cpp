@@ -85,17 +85,6 @@ void vec3::operator/=(float c)
 	z /= c;
 }
 
-void vec3::normalize()
-{
-	float length = sqrtf(x * x + y * y + z * z);
-	if (length)
-	{
-		x /= length;
-		y /= length;
-		z /= length;
-	}
-}
-
 vec3 vec3::to_RAD()
 {
 	vec3 ret(x, y, z);
@@ -107,13 +96,19 @@ vec3 two_angles_to_vec3(float angx, float angy)
 {
 	angx *= TO_RAD;
 	angy *= TO_RAD;
-	vec3 ret(sinf(angy)*cosf(angx), sinf(angx), cosf(angy)*cosf(angx));
-	return ret;
+	return vec3(sinf(angy) * cosf(angx), sinf(angx), cosf(angy) * cosf(angx));
 }
 
 float vec3::length()
 {
 	return sqrtf(x * x + y * y + z * z);
+}
+
+void vec3::normalize()
+{
+	float len = this->length();
+	if (len)
+		(*this) /= len;
 }
 
 vec3::vec3()

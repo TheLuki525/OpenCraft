@@ -37,7 +37,7 @@ void Chunk::setBlock(int x, int y, int z, GLubyte id)
 
 GLubyte Chunk::getBlock(int x, int y, int z)
 {
-	return blocks[x][y][z].visible;
+	return blocks[x][y][z].id;
 }
 
 Chunk::Chunk(GLubyte b)

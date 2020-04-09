@@ -33,6 +33,7 @@ class Game
 public:
 	Game();
 	~Game();
+	//friend callbacks because of "C" compatibility for GLUT
 	friend void OnRenderCallback();
 	friend void OnReshapeCallback(int width, int height);
 	friend void OnTimerCallback(int id);

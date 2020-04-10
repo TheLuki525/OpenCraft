@@ -27,10 +27,13 @@ void Chunk::setBlock(int x, int y, int z, GLubyte id)
 		int i = 0;
 		for (float f : { (id & 0b11100000) / 224.0f, (id & 0b00011100) / 28.0f, (id & 0b00000111) / 7.0f, 0.0f })
 			blocks[x][y][z].color[i++] = f;
+		blocks[x][y][z].visible = true;
+		blocks[x][y][z].id = id;
 	}
 	else
 	{
 		blocks[x][y][z].visible = false;
+		blocks[x][y][z].id = id;
 		//TO DO: set neighbour blocks visibility (also in neighbour chunks!)
 	}
 }

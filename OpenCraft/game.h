@@ -23,6 +23,8 @@ class Game
 	HWND HgameWindow;
 	Map map;
 	std::string nickname;
+	std::pair<vec3, vec3> ray_blocks;
+
 	void OnRender();
 	void OnReshape(int width, int height);
 	void OnTimer(int id);

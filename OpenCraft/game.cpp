@@ -11,9 +11,9 @@ Game::Game()
 	kb = nullptr;
 	pause = true;
 	nickname_rdy = false;
-	ch1.pos.x = 1.0f;
+	ch1.pos.x = 0.0f;
 	ch1.pos.y = 60.0f;
-	ch1.pos.z = 1.0f;
+	ch1.pos.z = 0.0f;
 	time = -1;
 	srand(123);
 	runKeyPressed = 0;
@@ -117,17 +117,7 @@ void Game::OnRender()
 	float global_head_angle_x = -ch1.head_ang.x;
 	vec3 looking_vec = two_angles_to_vec3(global_head_angle_x, global_head_angle_y);
 	cam.set(looking_vec, ch1.pos);
-	//ray (the block the player is looking at)
-	{
-		vec3 step_vec = looking_vec / 20;//20 samples per block (len of looking_vec is 1.0)
-		vec3 ray_vec = ch1.pos;
-		ray_vec.y += PLAYER_EYE_HEIGHT;
-		for (int i = 0; i < 100; i++)
-		{
-			ray_vec += step_vec;
-			map.getBlock(ray_vec.x, ray_vec.y, ray_vec.z);
-		}
-	}
+	
 	//Dynamically add chunks
 	for(int x = -2; x <= 2; x++)
 		for (int z = -2; z <= 2; z++)
@@ -184,6 +174,24 @@ void Game::OnRender()
 		glMatrixMode(GL_MODELVIEW);
 	}
 	glPopMatrix();
+	//ray (the block the player is looking at)
+	ray_blocks = map.apply_ray_scan(ch1.pos + vec3(0.0f, PLAYER_EYE_HEIGHT, 0.0f), looking_vec / 80);
+
+	if (!(ray_blocks.first == ray_blocks.second))
+	{
+		glPushMatrix();//draw black outline of the block the player is looking at
+		{
+			glTranslatef(floor(ray_blocks.first.x) + 0.5, floor(ray_blocks.first.y) + 0.5, floor(ray_blocks.first.z) + 0.5);
+			GLfloat color[4] = { 0.0, 0.0, 0.0, 0.0 };
+			glMaterialf(GL_FRONT, GL_SHININESS, 0.0f);
+			glMaterialfv(GL_FRONT, GL_AMBIENT, color);
+			glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
+			glMaterialfv(GL_FRONT, GL_SPECULAR, color);
+			glutWireCube(1.01);
+		}
+		glPopMatrix();
+	}
+	
 
 #pragma endregion
 	
@@ -423,6 +431,13 @@ void Game::Mouse(int button, int state, int x, int y)
 		cam.expected_dist++;
 	else if (button == 4)//wheel-down event
 		cam.expected_dist--;
+	if (!pause && !(ray_blocks.first == ray_blocks.second))
+	{
+		if (button == GLUT_LEFT_BUTTON)
+			map.setBlock(ray_blocks.first.x, ray_blocks.first.y, ray_blocks.first.z, 0);
+		if (button == GLUT_RIGHT_BUTTON)
+			map.setBlock(ray_blocks.second.x, ray_blocks.second.y, ray_blocks.second.z, 123);
+	}
 }
 
 void Game::setHgameWindow(HWND h)

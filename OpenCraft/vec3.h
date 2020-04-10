@@ -33,5 +33,6 @@ vec3 operator+(vec3 v, vec3 c);
 vec3 operator-(vec3 v, vec3 c);
 vec3 operator*(vec3 v, vec3 c);
 vec3 operator/(vec3 v, vec3 c);
+bool operator==(vec3 v, vec3 c);
 
 vec3 two_angles_to_vec3(float x, float y);

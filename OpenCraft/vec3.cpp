@@ -220,3 +220,8 @@ vec3 operator/(vec3 v, vec3 c)
 	v.z /= c.z;
 	return v;
 }
+
+bool operator==(vec3 v, vec3 c)
+{
+	return v.x == c.x && v.y == c.y && v.z == c.z;
+}
